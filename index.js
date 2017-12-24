@@ -31,37 +31,83 @@ db.on('child_changed', function (snapshot) {
   let arrTry = []
   arrTry.push(data)
   showdata = arrTry
-  
-
-
+  /* When instance changed this parth will update your local variable to update data*/
 })
-setInterval(() => {alertTemparature ('Node1')},5000)
+setInterval(() => {
+alertTemparature ('Node1')
+alertInOutBound ('Node1')
+checkNodeDown ('Node1')
+},90000)
 
 function alertTemparature (nodeName) {
 
   let temparature = showdata.find(info => info.node === nodeName).temparature
-   console.log("Doing check")
-   console.log(temparature.length)
-   console.log(temparature[temparature.length-1].valuet*1 >= HIGH_TEMPARATURE)
-   console.log(temparature[temparature.length-1].valuet*1)
-   console.log("Now temp" + JSON.stringify(temparature[temparature.length-1]) )
   if(temparature[temparature.length-1].valuet*1 >= HIGH_TEMPARATURE ){
-    console.log("Send Alert")
-    request(
-      {
-        method: "POST",
-        uri: "https://notify-api.line.me/api/notify",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        auth: {
-          bearer: token
-        },
-        form: {
-          message: "High Temparature NOW !!! " + JSON.stringify(temparature[temparature.length-1]) + "*C Check your System now !!"
-        }
-      },
-      (err, httpResponse, body) => {}
-    )
+    let Temp = JSON.stringify(temparature[temparature.length-1].valuet)
+  Temp = Temp.replace(/(")/g,'')
+    let message = " ⚠️⚠️⚠️ High Temparature NOW !!! " + Temp + "*C Check your System now !! ⚠️ ⚠️ ⚠️"
+    sendMessageToLine(message)
   }
+}
+
+function checkNodeDown(nodeName) {
+  let nodeStatusAlive = showdata.find(info => info.node === nodeName).alive
+  let nodeStatusAliveShow = showdata.find(info => info.node === nodeName).alive2
+  let dataID =  showdata.find(info => info.node === nodeName).id
+
+  if(nodeStatusAlive){
+    firebase.database().ref('db/' + dataID ).update({
+      alive: false
+    })
+  }else{
+    firebase.database().ref('db/' + dataID ).update({
+      alive2: false
+    })
+    let message = "⚠️⚠️⚠️⚠️ Your " + nodeName + " have been down check your system ⚠️⚠️⚠️"
+    sendMessageToline(message)
+  }
+}
+
+function alertInOutBound (nodeName) {
+  let inBound = showdata.find(info => info.node === nodeName).inbound
+  let outBound = showdata.find(info => info.node === nodeName).outbound
+  let limitIn = showdata.find(info => info.node === nodeName).limitin
+  let limitOut = showdata.find(info => info.node === nodeName).limitout
+
+  if(inBound[inBound.length-1].value*1 >= limitIn ){
+    // console.log("Send Alert") 
+    let overInbound = JSON.stringify(inBound[inBound.length-1].value)
+  overInbound = overInbound.replace(/(")/g,'')
+    let message = " ⚠️⚠️⚠️ WARNING your system Inbound Over Limitation :" + overInbound + "Check your System now !! ⚠️ ⚠️ ⚠️"
+    sendMessageToLine(message)
+  }
+
+  if(outBound[outBound.length-1].value*1 >= limitOut ){
+    // console.log("Send Alert") 
+    let overOutbound = JSON.stringify(outBound[outBound.length-1].value)
+  overOutbound = overOutbound.replace(/(")/g,'')
+    let message = " ⚠️⚠️⚠️ WARNING your system Outbound Over Limitation :" + overOutbound + "Check your System now !! ⚠️ ⚠️ ⚠️"
+    sendMessageToLine(message)
+  }
+
+}
+
+function sendMessageToLine(messageToSend) {
+
+  request(
+    {
+      method: "POST",
+      uri: "https://notify-api.line.me/api/notify",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      auth: {
+        bearer: token
+      },
+      form: {
+        message: messageToSend
+      }
+    },
+    (err, httpResponse, body) => {}
+  )
 }
