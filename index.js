@@ -36,20 +36,25 @@ db.on('child_changed', function (snapshot) {
   /* When instance changed this parth will update your local variable to update data*/
 })
 
-app.get('/wakeme', function (req,res){
+/*app.get('/wakeme', function (req,res){
   res.send('I wake up')
 })
 
 app.post('/wakeme', function (req,res){
   var data = req.body
   res.sendStatus(200)
-})
+})*/
 
 setInterval(() => {
 alertTemparature ('Node1')
 alertInOutBound ('Node1')
 checkNodeDown ('Node1')
 },90000)
+
+setInterval(() => {
+   wakeMeup()
+}, 300000) // ev
+
 
 function alertTemparature (nodeName) {
 
@@ -122,5 +127,9 @@ function sendMessageToLine(messageToSend) {
     },
     (err, httpResponse, body) => {}
   )
+}
+
+function wakeMeup () {
+  request.get('https://line-alert.herokuapp.com/wakeme')
 }
 
