@@ -1,9 +1,11 @@
 const request = require('request')
 const firebase = require("firebase")
+const express = require('express')
 const token = '2C64i629Vr3b772BeF0vw28PJFInVQ0Sig7lPADBnrw'
 const HIGH_TEMPARATURE = 30
+let app = express()
 
-var config = {
+let config = {
   apiKey: "AIzaSyCjFxu7Ft4mfHp8ksLYoRkOSWeK4tRmI0w",
   authDomain: "showdowndata.firebaseapp.com",
   databaseURL: "https://showdowndata.firebaseio.com",
@@ -33,6 +35,16 @@ db.on('child_changed', function (snapshot) {
   showdata = arrTry
   /* When instance changed this parth will update your local variable to update data*/
 })
+
+app.get('/wakeme', function (req,res){
+  res.send('I wake up')
+})
+
+app.post('/wakeme', function (req,res){
+  var data = req.body
+  res.sendStatus(200)
+})
+
 setInterval(() => {
 alertTemparature ('Node1')
 alertInOutBound ('Node1')
@@ -111,3 +123,4 @@ function sendMessageToLine(messageToSend) {
     (err, httpResponse, body) => {}
   )
 }
+
