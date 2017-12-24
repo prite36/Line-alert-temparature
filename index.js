@@ -77,7 +77,8 @@ function checkNodeDown(nodeName) {
   let nodeStatusAlive = showdata.find(info => info.node === nodeName).alive
   let nodeStatusAliveShow = showdata.find(info => info.node === nodeName).alive2
   let dataID =  showdata.find(info => info.node === nodeName).id
-
+  console.log("DATA ID = "+ dataID)
+  console.log("nodestatusalive " + nodeStatusAlive)
   if(nodeStatusAlive){
     firebase.database().ref('db/' + dataID ).update({
       alive: false
