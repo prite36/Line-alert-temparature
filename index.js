@@ -55,7 +55,7 @@ setTimeout(() => {
     alertInOutBound ('Node1')
     checkNodeDown ('Node1')
     },90000)
-},3000)
+},10000)
 
 setInterval(() => {
    wakeMeup()
