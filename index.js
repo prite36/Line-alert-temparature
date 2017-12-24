@@ -46,7 +46,7 @@ db.on('child_changed', function (snapshot) {
     alertTemparature ('Node1')
     alertInOutBound ('Node1')
     checkNodeDown ('Node1')
- },90000)
+ },5000)
 
 setInterval(() => {
    wakeMeup()
