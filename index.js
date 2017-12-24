@@ -88,7 +88,7 @@ function checkNodeDown(nodeName) {
       alive2: false
     })
     let message = "⚠️⚠️⚠️⚠️ Your " + nodeName + " have been down check your system ⚠️⚠️⚠️"
-    sendMessageToline(message)
+    sendMessageToLine(message)
   }
 }
 
