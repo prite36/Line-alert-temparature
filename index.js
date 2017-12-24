@@ -19,12 +19,19 @@ firebase.initializeApp(config)
 let db = firebase.database().ref('db')
 let showdata = []
 
+/*app.get('/wakeme', function (req,res){
+  res.send('I wake up')
+})
+
+app.post('/wakeme', function (req,res){
+  var data = req.body
+  res.sendStatus(200)
+})*/
 
 db.on('child_added', function (snapshot) {
   let item = snapshot.val()
   item.id = snapshot.key
   showdata.push(item)
-
 })
 
 
@@ -37,26 +44,18 @@ db.on('child_changed', function (snapshot) {
   /* When instance changed this parth will update your local variable to update data*/
 })
 
-/*app.get('/wakeme', function (req,res){
-  res.send('I wake up')
-})
-
-app.post('/wakeme', function (req,res){
-  var data = req.body
-  res.sendStatus(200)
-})*/
-
 app.use(bodyParser.json())
 app.set('port', (process.env.PORT || 4000))
 app.listen(app.get('port'), function () {
   console.log('run at port', app.get('port'))
 })
-
-setInterval(() => {
-alertTemparature ('Node1')
-alertInOutBound ('Node1')
-checkNodeDown ('Node1')
-},90000)
+setTimeout(() => {
+  setInterval(() => {
+    alertTemparature ('Node1')
+    alertInOutBound ('Node1')
+    checkNodeDown ('Node1')
+    },90000)
+},3000)
 
 setInterval(() => {
    wakeMeup()
@@ -135,8 +134,6 @@ function sendMessageToLine(messageToSend) {
     (err, httpResponse, body) => {}
   )
 }
-
 function wakeMeup () {
-  request.get('https://line-alert.herokuapp.com/wakeme')
+  request.get('https://line-alert.herokuapp.com/')
 }
-
