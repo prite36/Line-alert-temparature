@@ -1,6 +1,7 @@
 const request = require('request')
 const firebase = require("firebase")
 const express = require('express')
+const bodyParser = require('body-parser')
 const token = '2C64i629Vr3b772BeF0vw28PJFInVQ0Sig7lPADBnrw'
 const HIGH_TEMPARATURE = 30
 let app = express()
