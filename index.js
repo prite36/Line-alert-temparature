@@ -45,6 +45,12 @@ app.post('/wakeme', function (req,res){
   res.sendStatus(200)
 })*/
 
+app.use(bodyParser.json())
+app.set('port', (process.env.PORT || 4000))
+app.listen(app.get('port'), function () {
+  console.log('run at port', app.get('port'))
+})
+
 setInterval(() => {
 alertTemparature ('Node1')
 alertInOutBound ('Node1')
