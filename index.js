@@ -27,7 +27,7 @@ app.post('/wakeme', function (req,res){
   var data = req.body
   res.sendStatus(200)
 })*/
-setInterval(() => {
+
 db.on('child_added', function (snapshot) {
   let item = snapshot.val()
   item.id = snapshot.key
@@ -36,13 +36,14 @@ db.on('child_added', function (snapshot) {
 
 
 db.on('child_changed', function (snapshot) {
-  let id = snapshot.key
   let data = snapshot.val()
+  data.id = snapshot.key
   let arrTry = []
   arrTry.push(data)
   showdata = arrTry
   /* When instance changed this parth will update your local variable to update data*/
 })
+setInterval(() => {
     alertTemparature ('Node1')
     alertInOutBound ('Node1')
     checkNodeDown ('Node1')
